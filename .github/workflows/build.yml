@@ -38,9 +38,9 @@ jobs:
         uses: actions/cache@v4.0.1
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            !~/.gradle/caches/build-cache-*
+            ~/android/.gradle/caches
+            ~/android/.gradle/wrapper
+            !~/android/.gradle/caches/build-cache-*
           key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts', '**/build.gradle', '**/libs.versions.toml') }}
           restore-keys: |
             gradle-deps
