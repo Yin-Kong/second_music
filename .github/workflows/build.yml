@@ -38,9 +38,9 @@ jobs:
         uses: actions/cache@v4.0.1
         with:
           path: |
-            ~/android/.gradle/caches
-            ~/android/.gradle/wrapper
-            !~/android/.gradle/caches/build-cache-*
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            !~/.gradle/caches/build-cache-*
           key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts', '**/build.gradle', '**/libs.versions.toml') }}
           restore-keys: |
             gradle-deps
@@ -51,32 +51,32 @@ jobs:
       - name: Build release
         id: buildRelease
         run: |
-          ./gradlew :android:assembleRelease
-          echo "releaseName=$(ls android/build/outputs/apk/release/*.apk | awk -F '(/|\\.apk)' '{print $6}')" >> $GITHUB_OUTPUT
+          ./gradlew :app:assembleRelease
+          echo "releaseName=$(ls app/build/outputs/apk/release/*.apk | awk -F '(/|\\.apk)' '{print $6}')" >> $GITHUB_OUTPUT
 
       - name: Upload release
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.buildRelease.outputs.releaseName }}
-          path: "android/build/outputs/apk/release/*.apk"
+          path: "app/build/outputs/apk/release/*.apk"
 
       - name: Upload mappings
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: mappings
-          path: "android/build/outputs/mapping/release"
+          path: "app/build/outputs/mapping/release"
 
       - name: Build debug
         id: buildDebug
         run: |
-          ./gradlew :android:assembleDebug
-          echo "debugName=$(ls android/build/outputs/apk/debug/*.apk | awk -F '(/|\\.apk)' '{print $6}')" >> $GITHUB_OUTPUT
+          ./gradlew :app:assembleDebug
+          echo "debugName=$(ls app/build/outputs/apk/debug/*.apk | awk -F '(/|\\.apk)' '{print $6}')" >> $GITHUB_OUTPUT
 
       - name: Upload debug
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.buildDebug.outputs.debugName }}
-          path: "android/build/outputs/apk/debug/*.apk"
+          path: "app/build/outputs/apk/debug/*.apk"
